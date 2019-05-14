@@ -12,41 +12,46 @@ class phpinfo
     }
 
     /**
+     * @param bool $tb
      * @return array
      */
-    static public function phpinfo_general()
+    static public function phpinfo_general($tb = false)
     {
-        return self::_parse_phpinfo(INFO_GENERAL);
+        return self::_parse_phpinfo(INFO_GENERAL, $tb);
     }
 
     /**
+     * @param bool $tb
      * @return array
      */
-    static public function phpinfo_configuration()
+    static public function phpinfo_configuration($tb = false)
     {
-        return self::_parse_phpinfo(INFO_CONFIGURATION);
+        return self::_parse_phpinfo(INFO_CONFIGURATION, $tb);
     }
 
     /**
+     * @param bool $tb
      * @return array
      */
-    static public function phpinfo_environment()
+    static public function phpinfo_environment($tb = false)
     {
-        return self::_parse_phpinfo(INFO_ENVIRONMENT);
+        return self::_parse_phpinfo(INFO_ENVIRONMENT, $tb);
     }
 
     /**
+     * @param bool $tb
      * @return array
      */
-    static public function phpinfo_variable()
+    static public function phpinfo_variable($tb = false)
     {
-        return self::_parse_phpinfo(INFO_VARIABLES);
+        return self::_parse_phpinfo(INFO_VARIABLES, $tb);
     }
 
     /**
+     * @param bool $tb
      * @return array
      */
-    static public function phpinfo_modules()
+    static public function phpinfo_modules($tb = false)
     {
         $cat = "None";
         $info_arr = [];
@@ -60,18 +65,21 @@ class phpinfo
                 preg_match("~<tr><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td></tr>~", $line, $val)
                 OR
                 preg_match("~<tr><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td></tr>~", $line, $val)
-            )
-                $info_arr[$cat][trim($val[1])] = trim(str_replace(';', '; ', $val[2]));
+            ) {
+                if ($tb) $info_arr[$cat][] = array("n" => trim($val[1]), "v" => trim(str_replace(';', '; ', $val[2])));
+                else $info_arr[$cat][trim($val[1])] = trim(str_replace(';', '; ', $val[2]));
+            }
         }
         return $info_arr;
     }
 
     /**
+     * @param bool $tb
      * @return array
      */
-    static public function phpinfo_credits()
+    static public function phpinfo_credits($tb = false)
     {
-        return self::_parse_phpinfo(INFO_CREDITS);
+        return self::_parse_phpinfo(INFO_CREDITS, $tb);
     }
 
     /**
@@ -87,26 +95,28 @@ class phpinfo
     }
 
     /**
+     * @param bool $tb
      * @return array
      */
-    static public function all()
+    static public function all($tb = false)
     {
         $res = array();
-        $res["General"] = self::phpinfo_general();
-        $res["Configuration"] = self::phpinfo_configuration();
-        $res["Environment"] = self::phpinfo_environment();
-        $res["Variable"] = self::phpinfo_variable();
-        $res["Modules"] = self::phpinfo_modules();
-        $res["Credits"] = self::phpinfo_credits();
+        $res["General"] = self::phpinfo_general($tb);
+        $res["Configuration"] = self::phpinfo_configuration($tb);
+        $res["Environment"] = self::phpinfo_environment($tb);
+        $res["Variable"] = self::phpinfo_variable($tb);
+        $res["Modules"] = self::phpinfo_modules($tb);
+        $res["Credits"] = self::phpinfo_credits($tb);
         $res["License"] = self::phpinfo_license();
         return $res;
     }
 
     /**
      * @param $type
+     * @param bool $tb
      * @return array
      */
-    static private function _parse_phpinfo($type)
+    static private function _parse_phpinfo($type, $tb)
     {
         $info_arr = [];
         ob_start();
@@ -118,8 +128,10 @@ class phpinfo
                 preg_match("~<tr><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td></tr>~", $line, $val)
                 OR
                 preg_match("~<tr><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td><td[^>]+>([^<]*)</td></tr>~", $line, $val)
-            )
-                $info_arr[trim($val[1])] = trim(str_replace(';', '; ', $val[2]));
+            ) {
+                if ($tb) $info_arr[] = array("n" => trim($val[1]), "v" => trim(str_replace(';', '; ', $val[2])));
+                else $info_arr[trim($val[1])] = trim(str_replace(';', '; ', $val[2]));
+            }
         }
         return $info_arr;
     }
