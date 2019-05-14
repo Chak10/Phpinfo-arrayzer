@@ -9,7 +9,7 @@ Make array from phpinfo.
     print_r($php::all());
 
  - Result
-
+```text
      Array
     (
         [General] => Array
@@ -42,7 +42,7 @@ Make array from phpinfo.
                 [Registered Stream Socket Transports] => tcp, udp, ssl, tls, tlsv1.0, tlsv1.1, tlsv1.2
                 [Registered Stream Filters] => convert.iconv.*, string.rot13, string.toupper, string.tolower, string.strip_tags, convert.*, consumed, dechunk, zlib.*, bzip2.*
             )
-    
+
         [Configuration] => Array
             (
                 [allow_url_fopen] => On
@@ -1298,3 +1298,4 @@ Make array from phpinfo.
     
         [License] => This program is free software; you can redistribute it and/or modify it under the terms of the PHP License as published by the PHP Group and included in the distribution in the file:  LICENSE. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.. If you did not receive a copy of the PHP license, or have any questions about PHP licensing, please contact license@php.net.
     )
+    ```
